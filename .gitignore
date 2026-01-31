@@ -27,6 +27,11 @@ go.work.sum
 # env file
 .env
 
+# Test output directory and temporary files
+fixtures/test_output/
+*.tmp
+go-doc-lint-2*.txt
+
 # Editor/IDE
 # .idea/
 # .vscode/

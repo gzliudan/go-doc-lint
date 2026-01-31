@@ -1,0 +1,2 @@
+# This file ensures the empty directory is tracked by Git
+# The empty directory is used for testing empty directory handling
