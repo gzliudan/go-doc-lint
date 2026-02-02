@@ -1,7 +1,9 @@
 # Check for required PowerShell version
 if ($PSVersionTable.PSVersion.Major -lt 5) {
-    Write-Error "❌ Error: PowerShell 5.0 or higher is required. Current version: $($PSVersionTable.PSVersion)" -ErrorAction Continue
-    Write-Host "   Tip: Download the latest PowerShell from: https://github.com/PowerShell/PowerShell/releases"
+    Write-Error "❌ Error: PowerShell 5.0 or higher is required." -ErrorAction Continue
+    Write-Host "   Current version: $($PSVersionTable.PSVersion)"
+    Write-Host "   Tip: Download the latest PowerShell from:"
+    Write-Host "   https://github.com/PowerShell/PowerShell/releases"
     exit 1
 }
 
@@ -40,7 +42,8 @@ for ($argIndex = 0; $argIndex -lt $args.Count; $argIndex++) {
         '^(--output|-o)$' {
             if ($argIndex + 1 -ge $args.Count) {
                 Write-Error "❌ Error: Missing value for option '$arg'"
-                Write-Host "   Usage: powershell -File $scriptName [options] <input_path> --output <output_path>"
+                Write-Host "   Usage: powershell -File $scriptName [options] <input_path>"
+                Write-Host "          --output <output_path>"
                 exit 1
             }
             $outputDir = $args[$argIndex + 1]
@@ -83,7 +86,8 @@ if ($showHelp -and ($args.Count -gt 1)) {
 
 if ($scanTestOnly -and $scanAll) {
     Write-Error "❌ Error: --test and --all are mutually exclusive options"
-    Write-Host "   Use either --test (test files only) or --all (all files) or neither (default: non-test files)"
+    Write-Host "   Use either --test (test files only) or --all (all files)"
+    Write-Host "   or neither (default: non-test files)"
     exit 1
 }
 
@@ -117,7 +121,8 @@ if ($outputToFile) {
             $outputDir = Split-Path -Parent $fullPath
             if (-not (Test-Path -LiteralPath $outputDir)) {
                 try {
-                    New-Item -ItemType Directory -Path $outputDir -Force -ErrorAction Stop | Out-Null
+                    New-Item -ItemType Directory -Path $outputDir `
+                        -Force -ErrorAction Stop | Out-Null
                 } catch {
                     Write-Error "❌ Error: Failed to create output directory: $outputDir"
                     Write-Host "   Tip: Check if parent directory exists and is writable"
@@ -135,7 +140,8 @@ if ($outputToFile) {
                     New-Item -ItemType Directory -Path $fullPath -Force -ErrorAction Stop | Out-Null
                 } catch {
                     Write-Error "❌ Error: Failed to create output directory: $fullPath"
-                    Write-Host "   Tip: Check if parent directory is writable and you have permissions"
+                    Write-Host "   Tip: Check if parent directory is writable"
+                    Write-Host "   and you have permissions"
                     exit 4
                 }
             }
@@ -198,12 +204,15 @@ $inputDirDisplay = $root
 $startTime = Get-Date
 
 if ((Get-Item $inputPath -ErrorAction SilentlyContinue) -is [System.IO.DirectoryInfo]) {
-    Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Starting to scan directory: $inputDirDisplay"
+    Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] " +
+                 "Starting to scan directory: $inputDirDisplay"
 } else {
-    Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Starting to scan file: $inputPath"
+    Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] " +
+                 "Starting to scan file: $inputPath"
 }
 
-Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Found $($goFiles.Count) Go file(s) to scan"
+Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] " +
+             "Found $($goFiles.Count) Go file(s) to scan"
 
 $results = @()
 $count = 0
@@ -246,7 +255,8 @@ foreach ($file in $goFiles) {
         #                     \w* : Followed by zero or more word characters
         #   \s*\(           : Optional whitespace then opening parenthesis for parameters
         # Example: "func ReadData(source string)" -> captures "ReadData"
-        if ($line -match '^\s*func\s+\([^)]+\)\s+([A-Za-z_]\w*)\s*\(' -or $line -match '^\s*func\s+([A-Za-z_]\w*)\s*\(') {
+        if ($line -match '^\s*func\s+\([^)]+\)\s+([A-Za-z_]\w*)\s*\(' -or
+            $line -match '^\s*func\s+([A-Za-z_]\w*)\s*\(') {
             # Extract function name from regex match
             $funcName = $null
             if ($line -match '^\s*func\s+\([^)]+\)\s+([A-Za-z_]\w*)\s*\(') {
@@ -273,7 +283,8 @@ foreach ($file in $goFiles) {
                     break
                 }
 
-                # If it's any comment line (including empty comment //), it's part of the doc comment
+                # If it's any comment line (including empty comment //),
+                # it's part of the doc comment
                 if ($trimmed -match '^//') {
                     # Prepend to array (since we're going backwards, prepend maintains order)
                     $allCommentLines = @($trimmed) + $allCommentLines
@@ -326,14 +337,17 @@ foreach ($file in $goFiles) {
 
                 # ===== MISMATCH DETECTION CONDITION =====
                 # Report mismatch if ALL conditions are met:
-                #   1. $firstCommentWord -ne $funcName : Comment first word differs from function name
+                #   1. $firstCommentWord -ne $funcName :
+                #      Comment first word differs from function name
                 #                                        (Case-sensitive comparison)
                 #   2. -not $isException               : First word does NOT end with colon
                 #                                        (Filters out TODO:, NOTE:, FIXME:, etc.)
                 # Examples:
                 #   Comment: "// read ..."   Function: "ReadData"    -> MISMATCH (read != ReadData)
-                #   Comment: "// TODO: ..."  Function: "OptimizeMe"  -> NO MISMATCH (TODO: is exception)
-                #   Comment: "// NOTE: ..."  Function: "Helper"      -> NO MISMATCH (NOTE: is exception)
+                #   Comment: "// TODO: ..."  Function: "OptimizeMe"
+                #   -> NO MISMATCH (TODO: is exception)
+                #   Comment: "// NOTE: ..."  Function: "Helper"
+                #   -> NO MISMATCH (NOTE: is exception)
                 #   Comment: "// ReadData .." Function: "ReadData"   -> NO MISMATCH (exact match)
                 if ($firstCommentWord -ne $funcName -and -not $isException) {
                     # Convert to relative path by removing the input root
@@ -364,11 +378,13 @@ $endTime = Get-Date
 $elapsedSeconds = [math]::Round(($endTime - $startTime).TotalSeconds, 1)
 
 if ($outputToFile) {
-    Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Scanning complete, found $($goFiles.Count) go files ($($elapsedSeconds)s)"
+    Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] " +
+                 "Scanning complete, found $($goFiles.Count) go files ($($elapsedSeconds)s)"
     if ($results.Count -eq 0) {
         Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] No mismatches found!"
     } else {
-        Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Found $($results.Count) function comment mismatches"
+        Write-Output "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] " +
+                     "Found $($results.Count) function comment mismatches"
     }
 }
 
@@ -439,7 +455,8 @@ function GenerateDirSummary {
 
     $dirStats = @{}
 
-    # Extract directory stats from resultArray (every 4 elements is one entry: file, comment, func, blank)
+    # Extract directory stats from resultArray
+    # (every 4 elements is one entry: file, comment, func, blank)
     for ($i = 0; $i -lt $resultArray.Count; $i += 4) {
         if ($resultArray[$i]) {
             $file = $resultArray[$i]

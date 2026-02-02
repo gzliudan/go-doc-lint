@@ -117,7 +117,8 @@ fi
 
 if $scan_test_only && $scan_all; then
   echo "❌ Error: --test and --all are mutually exclusive options" >&2
-  echo "   Use either --test (test files only) or --all (all files) or neither (default: non-test files)" >&2
+  echo "   Use either --test (test files only) or --all (all files)" >&2
+  echo "   or neither (default: non-test files)" >&2
   exit 1
 fi
 
@@ -147,7 +148,11 @@ if $output_to_file; then
       fi
 
       # Clean up path (remove redundant . and ..)
-      output_dir="$(realpath -m "$output_dir" 2>/dev/null || readlink -f "$output_dir" 2>/dev/null || echo "$output_dir")"
+      output_dir="$(
+        realpath -m "$output_dir" 2>/dev/null || \
+        readlink -f "$output_dir" 2>/dev/null || \
+        echo "$output_dir"
+      )"
       output_file="$output_dir/$filename"
 
       # Check if output file already exists
@@ -161,7 +166,8 @@ if $output_to_file; then
       if [[ ! -d "$output_dir" ]]; then
         if ! mkdir -p "$output_dir"; then
           echo "❌ Error: Failed to create output directory: $output_dir" >&2
-          echo "   Tip: Check directory permissions: $(ls -ld "$output_dir" 2>&1 || echo 'parent not accessible')" >&2
+          echo "   Tip: Check directory permissions:" >&2
+          echo "   $(ls -ld "$output_dir" 2>&1 || echo 'parent not accessible')" >&2
           exit 4
         fi
       fi
@@ -172,13 +178,18 @@ if $output_to_file; then
       fi
 
       # Clean up path
-      output_dir="$(realpath -m "$output_dir" 2>/dev/null || readlink -f "$output_dir" 2>/dev/null || echo "$output_dir")"
+      output_dir="$(
+        realpath -m "$output_dir" 2>/dev/null || \
+        readlink -f "$output_dir" 2>/dev/null || \
+        echo "$output_dir"
+      )"
 
       # Create directory if needed
       if [[ ! -d "$output_dir" ]]; then
         if ! mkdir -p "$output_dir"; then
           echo "❌ Error: Failed to create output directory: $output_dir" >&2
-          echo "   Tip: Check if parent directory is writable: $(ls -ld "$(dirname "$output_dir")" 2>&1 || echo 'check permissions')" >&2
+          echo "   Tip: Check if parent directory is writable:" >&2
+          echo "   $(ls -ld "$(dirname "$output_dir")" 2>&1 || echo 'check permissions')" >&2
           exit 4
         fi
       fi
@@ -214,7 +225,11 @@ fi
 is_single_file="false"
 if [[ -d "$input_path" ]]; then
   root="$input_path_resolved"
-  mapfile -t go_files < <(find "$root" -type f -name "*.go" \( -path "*/vendor/*" -o -path "*/.git/*" \) -prune -false -o -type f -name "*.go" -print)
+  mapfile -t go_files < <(
+    find "$root" -type f -name "*.go" \
+      \( -path "*/vendor/*" -o -path "*/.git/*" \) -prune -false \
+      -o -type f -name "*.go" -print
+  )
 else
   if [[ "${input_path##*.}" != "go" ]]; then
     echo "❌ Error: Input file must be a .go file: '$input_path'" >&2
@@ -326,8 +341,11 @@ for file in "${go_files[@]}"; do
       $func = $1;
     }
 
-    if ($func ne "" && $commentLine ne "" && $firstWord ne "" && $firstWord ne $func && $firstWord !~ /:$/) {
-      print $rel, $sep, $firstWord, $sep, $func, $sep, $commentLine, $sep, $line, "\n";
+    if ($func ne "" && $commentLine ne "" &&
+        $firstWord ne "" && $firstWord ne $func &&
+        $firstWord !~ /:$/) {
+      print $rel, $sep, $firstWord, $sep, $func, $sep,
+            $commentLine, $sep, $line, "\n";
     }
 
     $inComment = 0;
@@ -346,7 +364,8 @@ end_time=$(date +%s)
 elapsed_time=$((end_time - start_time))
 
 if [ "$output_to_file" = "true" ]; then
-  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Scanning complete, found ${#go_files[@]} go files (${elapsed_time}s)"
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Scanning complete, " \
+       "found ${#go_files[@]} go files (${elapsed_time}s)"
   if [[ "$mismatch_count" -eq 0 ]]; then
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] No mismatches found!"
   else

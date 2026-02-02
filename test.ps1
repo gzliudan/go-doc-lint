@@ -177,44 +177,70 @@ function Test-Help {
 
 # Test 3: Scan directory without output option
 function Test-ScanDirectoryScreen {
-    Test-OutputMatches -TestName "Scan directory - screen output" -Pattern "Summary" -Arguments @($testDir)
+    Test-OutputMatches `
+        -TestName "Scan directory - screen output" `
+        -Pattern "Summary" `
+        -Arguments @($testDir)
 }
 
-# Test 4: Scan single file
+# Test 5: Scan single file
 function Test-ScanSingleFile {
-    Test-OutputMatches -TestName "Scan single file" -Pattern "Summary" -Arguments @("$testDir\valid\good.go")
+    Test-OutputMatches `
+        -TestName "Scan single file" `
+        -Pattern "Summary" `
+        -Arguments @("$testDir\valid\good.go")
 }
 
 # Test 5: Scan with invalid directory
 function Test-ScanInvalidDirectory {
-    Test-OutputMatches -TestName "Handle invalid directory" -Pattern "not found|does not exist" -Arguments @("$testDir\nonexistent")
+    Test-OutputMatches `
+        -TestName "Handle invalid directory" `
+        -Pattern "not found|does not exist" `
+        -Arguments @("$testDir\nonexistent")
 }
 
 # Test 6: Scan with test files only
 function Test-ScanTestOnly {
-    Test-OutputMatches -TestName "Scan test files only (--test)" -Pattern "Summary" -Arguments @($testDir, "--test")
+    Test-OutputMatches `
+        -TestName "Scan test files only (--test)" `
+        -Pattern "Summary" `
+        -Arguments @($testDir, "--test")
 }
 
 # Test 7: Scan all files
 function Test-ScanAll {
-    Test-OutputMatches -TestName "Scan all files (--all)" -Pattern "Summary" -Arguments @($testDir, "--all")
+    Test-OutputMatches `
+        -TestName "Scan all files (--all)" `
+        -Pattern "Summary" `
+        -Arguments @($testDir, "--all")
 }
 
 # Test 8: Save to file
 function Test-SaveToFile {
     $outputFile = Join-Path $outputDir "report.txt"
-    Test-FileExistsAfterCommand -TestName "Save output to file" -FilePath $outputFile -Arguments @($testDir, "-o", $outputFile)
+    Test-FileExistsAfterCommand `
+        -TestName "Save output to file" `
+        -FilePath $outputFile `
+        -Arguments @($testDir, "-o", $outputFile)
 }
 
 # Test 9: Save to directory (auto-generate filename)
 function Test-SaveToDirectory {
     $outputSubdir = Join-Path $outputDir "subdir"
-    Test-FilesCountInPath -TestName "Save to directory with auto-generated filename" -SearchDir $outputSubdir -FilePattern "go-doc-lint-*.txt" -ExpectedCount 0 -Arguments @($testDir, "-o", $outputSubdir)
+    Test-FilesCountInPath `
+        -TestName "Save to directory with auto-generated filename" `
+        -SearchDir $outputSubdir `
+        -FilePattern "go-doc-lint-*.txt" `
+        -ExpectedCount 0 `
+        -Arguments @($testDir, "-o", $outputSubdir)
 }
 
 # Test 10: Test mutual exclusion
 function Test-MutualExclusion {
-    Test-OutputMatches -TestName "Reject mutually exclusive parameters" -Pattern "mutually exclusive" -Arguments @($testDir, "--test", "--all")
+    Test-OutputMatches `
+        -TestName "Reject mutually exclusive parameters" `
+        -Pattern "mutually exclusive" `
+        -Arguments @($testDir, "--test", "--all")
 }
 
 # Test 11: Check timestamp in progress messages
@@ -229,39 +255,62 @@ function Test-TimestampInProgress {
 # Test 12: Verify findings section in report
 function Test-FindingsInReport {
     $outputFile = Join-Path $outputDir "findings_test.txt"
-    Test-FileContains -TestName "Report contains Findings details section" -FilePath $outputFile -Pattern "Findings details" -Arguments @("$testDir\invalid", "-o", $outputFile)
+    Test-FileContains `
+        -TestName "Report contains Findings details section" `
+        -FilePath $outputFile `
+        -Pattern "Findings details" `
+        -Arguments @("$testDir\invalid", "-o", $outputFile)
 }
 
 # Test 13: Directory statistics in multi-directory scan
 function Test-DirectoryStatistics {
-    Test-OutputMatches -TestName "Directory statistics shown for multi-directory scan" -Pattern "Directory statistics" -Arguments @($testDir)
+    Test-OutputMatches `
+        -TestName "Directory statistics shown for multi-directory scan" `
+        -Pattern "Directory statistics" `
+        -Arguments @($testDir)
 }
 
 # Test 14: Single file excludes directory statistics
 function Test-SingleFileNoDirStats {
-    Test-OutputNotMatches -TestName "Single file scan excludes directory statistics" -Pattern "Directory statistics" -Arguments @("$testDir\valid\good.go")
+    Test-OutputNotMatches `
+        -TestName "Single file scan excludes directory statistics" `
+        -Pattern "Directory statistics" `
+        -Arguments @("$testDir\valid\good.go")
 }
 
 # Test 15: Valid file shows zero findings
 function Test-ValidFileCheck {
-    Test-OutputMatches -TestName "Valid Go file shows zero findings" -Pattern "findings\s+0" -Arguments @("$testDir\valid\good.go")
+    Test-OutputMatches `
+        -TestName "Valid Go file shows zero findings" `
+        -Pattern "findings\s+0" `
+        -Arguments @("$testDir\valid\good.go")
 }
 
 # Test 16: Check separator lines in report
 function Test-SeparatorLines {
     $outputFile = Join-Path $outputDir "separator_test.txt"
     Invoke-Linter -Arguments @($testDir, "-o", $outputFile) | Out-Null
-    Test-PatternCountInFile -TestName "Report contains separator lines" -FilePath $outputFile -Pattern $separatorPattern -MinCount $minSeparators
+    Test-PatternCountInFile `
+        -TestName "Report contains separator lines" `
+        -FilePath $outputFile `
+        -Pattern $separatorPattern `
+        -MinCount $minSeparators
 }
 
 # Test 17: Non-existent file error
 function Test-NonExistentFile {
-    Test-OutputMatches -TestName "Handle non-existent file" -Pattern "not found|does not exist" -Arguments @("$testDir\nonexistent.go")
+    Test-OutputMatches `
+        -TestName "Handle non-existent file" `
+        -Pattern "not found|does not exist" `
+        -Arguments @("$testDir\nonexistent.go")
 }
 
 # Test 18: Invalid file type
 function Test-InvalidFileType {
-    Test-OutputMatches -TestName "Reject non-.go files" -Pattern "must be a .go file" -Arguments @("$testDir\utils\README.md")
+    Test-OutputMatches `
+        -TestName "Reject non-.go files" `
+        -Pattern "must be a .go file" `
+        -Arguments @("$testDir\utils\README.md")
 }
 
 # Test 19: No arguments should show help
@@ -275,12 +324,18 @@ function Test-NoArguments {
 
 # Test 20: Version cannot be used with other parameters
 function Test-VersionWithParams {
-    Test-OutputMatches -TestName "Version with params rejected" -Pattern "cannot be used with other parameters" -Arguments @("--version", "-o", (Join-Path $outputDir "test.txt"))
+    Test-OutputMatches `
+        -TestName "Version with params rejected" `
+        -Pattern "cannot be used with other parameters" `
+        -Arguments @("--version", "-o", (Join-Path $outputDir "test.txt"))
 }
 
 # Test 21: Help cannot be used with other parameters
 function Test-HelpWithParams {
-    Test-OutputMatches -TestName "Help with params rejected" -Pattern "cannot be used with other parameters" -Arguments @("--help", "-o", (Join-Path $outputDir "test.txt"))
+    Test-OutputMatches `
+        -TestName "Help with params rejected" `
+        -Pattern "cannot be used with other parameters" `
+        -Arguments @("--help", "-o", (Join-Path $outputDir "test.txt"))
 }
 
 # Test 22: Output file already exists error
@@ -298,18 +353,29 @@ function Test-OutputFileExists {
 # Test 23: Output to specific file name
 function Test-OutputFileName {
     $outputFile = Join-Path $outputDir "custom_report.txt"
-    Test-FileExistsAfterCommand -TestName "Output to specific filename" -FilePath $outputFile -Arguments @($testDir, "-o", $outputFile)
+    Test-FileExistsAfterCommand `
+        -TestName "Output to specific filename" `
+        -FilePath $outputFile `
+        -Arguments @($testDir, "-o", $outputFile)
 }
 
 # Test 24: Output to nested directory (auto-create)
 function Test-OutputNestedDir {
     $nestedDir = Join-Path $outputDir "level1\level2\level3"
-    Test-FilesCountInPath -TestName "Auto-create nested output directory" -SearchDir $nestedDir -FilePattern "go-doc-lint-*.txt" -ExpectedCount 0 -Arguments @($testDir, "-o", $nestedDir)
+    Test-FilesCountInPath `
+        -TestName "Auto-create nested output directory" `
+        -SearchDir $nestedDir `
+        -FilePattern "go-doc-lint-*.txt" `
+        -ExpectedCount 0 `
+        -Arguments @($testDir, "-o", $nestedDir)
 }
 
 # Test 25: Scan mixed valid and invalid files
 function Test-MixedFiles {
-    Test-OutputMatches -TestName "Scan mixed valid and invalid" -Pattern "Summary" -Arguments @("$testDir\mixed")
+    Test-OutputMatches `
+        -TestName "Scan mixed valid and invalid" `
+        -Pattern "Summary" `
+        -Arguments @("$testDir\mixed")
 }
 
 # Test 26: Relative path handling
@@ -326,12 +392,18 @@ function Test-RelativePath {
 
 # Test 27: Empty directory handling
 function Test-EmptyDirectory {
-    Test-OutputMatches -TestName "Empty directory no files message" -Pattern "No Go files to scan" -Arguments @("$testDir\empty")
+    Test-OutputMatches `
+        -TestName "Empty directory no files message" `
+        -Pattern "No Go files to scan" `
+        -Arguments @("$testDir\empty")
 }
 
 # Test 28: Deep nested path
 function Test-DeepNestedPath {
-    Test-OutputMatches -TestName "Scan deeply nested path" -Pattern "Summary" -Arguments @("$testDir\deep\nested\directory\structure")
+    Test-OutputMatches `
+        -TestName "Scan deeply nested path" `
+        -Pattern "Summary" `
+        -Arguments @("$testDir\deep\nested\directory\structure")
 }
 
 # Test 29: Directory statistics shows correct directory names

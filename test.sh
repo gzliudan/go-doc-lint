@@ -190,51 +190,74 @@ test_scan_all() {
 # Test 8: Save to file
 test_save_to_file() {
     local output_file="$OUTPUT_DIR/report.txt"
-    test_file_exists_after_command "Save output to file" "$output_file" "$TEST_DIR/valid" -o "$output_file"
+    test_file_exists_after_command \
+        "Save output to file" \
+        "$output_file" \
+        "$TEST_DIR/valid" -o "$output_file"
 }
 
 # Test 9: Save to directory (auto-generate filename)
 test_save_to_directory() {
     local output_subdir="$OUTPUT_DIR/subdir"
-    test_files_count_in_path "Save to directory with auto-generated filename" "$output_subdir" "go-doc-lint-*.txt" 0 "$TEST_DIR/valid" -o "$output_subdir/"
+    test_files_count_in_path \
+        "Save to directory with auto-generated filename" \
+        "$output_subdir" "go-doc-lint-*.txt" 0 \
+        "$TEST_DIR/valid" -o "$output_subdir/"
 }
 
 # Test 10: Test mutual exclusion (--test with --all)
 test_mutual_exclusion() {
-    test_output_matches "Reject mutually exclusive parameters" "mutually exclusive" "$TEST_DIR" --test --all
+    test_output_matches \
+        "Reject mutually exclusive parameters" \
+        "mutually exclusive" \
+        "$TEST_DIR" --test --all
 }
 
 # Test 11: Check output contains timestamp
 test_timestamp_in_progress() {
-    test_output_matches "Progress messages contain timestamps" "\\[[0-9]{4}-[0-9]{2}-[0-9]{2}" "$TEST_DIR/valid" -o "$OUTPUT_DIR/test_timestamp.txt"
+    test_output_matches \
+        "Progress messages contain timestamps" \
+        "\\[[0-9]{4}-[0-9]{2}-[0-9]{2}" \
+        "$TEST_DIR/valid" -o "$OUTPUT_DIR/test_timestamp.txt"
 }
 
 # Test 12: Verify findings in report
 test_findings_in_report() {
     local output_file="$OUTPUT_DIR/findings_test.txt"
-    test_file_contains "Report contains Findings details section" "$output_file" "Findings details" "$TEST_DIR/invalid" -o "$output_file"
+    test_file_contains \
+        "Report contains Findings details section" \
+        "$output_file" "Findings details" \
+        "$TEST_DIR/invalid" -o "$output_file"
 }
 
 # Test 13: Verify directory statistics section presence
 test_directory_statistics() {
-    test_output_matches "Directory statistics shown for multi-directory scan" "Directory statistics" "$TEST_DIR"
+    test_output_matches \
+        "Directory statistics shown for multi-directory scan" \
+        "Directory statistics" "$TEST_DIR"
 }
 
 # Test 14: Single file should not show directory statistics
 test_single_file_no_dir_stats() {
-    test_output_not_matches "Single file scan excludes directory statistics" "Directory statistics" "$TEST_DIR/valid/good.go"
+    test_output_not_matches \
+        "Single file scan excludes directory statistics" \
+        "Directory statistics" "$TEST_DIR/valid/good.go"
 }
 
 # Test 15: Check valid directory (good.go should pass)
 test_valid_file_check() {
-    test_output_matches "Valid Go file shows zero findings" "findings:[[:space:]]*0" "$TEST_DIR/valid/good.go"
+    test_output_matches \
+        "Valid Go file shows zero findings" \
+        "findings:[[:space:]]*0" "$TEST_DIR/valid/good.go"
 }
 
 # Test 16: Check separator lines in report
 test_separator_lines() {
     local output_file="$OUTPUT_DIR/separator_test.txt"
     "$LINTER" "$TEST_DIR/valid" -o "$output_file" > /dev/null 2>&1
-    test_pattern_count_in_file "Report contains separator lines" "$output_file" "^==========" "$MIN_SEPARATORS"
+    test_pattern_count_in_file \
+        "Report contains separator lines" \
+        "$output_file" "^==========" "$MIN_SEPARATORS"
 }
 
 # Test 17: Handle non-existent file error
@@ -261,12 +284,18 @@ test_no_arguments() {
 
 # Test 20: Version cannot be used with other parameters
 test_version_with_params() {
-    test_output_matches "Version with params rejected" "cannot be used with other parameters" --version -o "$OUTPUT_DIR/test.txt"
+    test_output_matches \
+        "Version with params rejected" \
+        "cannot be used with other parameters" \
+        --version -o "$OUTPUT_DIR/test.txt"
 }
 
 # Test 21: Help cannot be used with other parameters
 test_help_with_params() {
-    test_output_matches "Help with params rejected" "cannot be used with other parameters" --help -o "$OUTPUT_DIR/test.txt"
+    test_output_matches \
+        "Help with params rejected" \
+        "cannot be used with other parameters" \
+        --help -o "$OUTPUT_DIR/test.txt"
 }
 
 # Test 22: Output file already exists error
@@ -287,13 +316,18 @@ test_output_file_exists() {
 # Test 23: Output to specific file name
 test_output_file_name() {
     local output_file="$OUTPUT_DIR/custom_report.txt"
-    test_file_exists_after_command "Output to specific filename" "$output_file" "$TEST_DIR/valid" -o "$output_file"
+    test_file_exists_after_command \
+        "Output to specific filename" \
+        "$output_file" "$TEST_DIR/valid" -o "$output_file"
 }
 
 # Test 24: Output to nested directory (auto-create)
 test_output_nested_dir() {
     local nested_dir="$OUTPUT_DIR/level1/level2/level3"
-    test_files_count_in_path "Auto-create nested output directory" "$nested_dir" "go-doc-lint-*.txt" 0 "$TEST_DIR/valid" -o "$nested_dir/"
+    test_files_count_in_path \
+        "Auto-create nested output directory" \
+        "$nested_dir" "go-doc-lint-*.txt" 0 \
+        "$TEST_DIR/valid" -o "$nested_dir/"
 }
 
 # Test 25: Scan mixed valid and invalid files
@@ -324,7 +358,9 @@ test_empty_directory() {
 
 # Test 28: Deep nested path
 test_deep_nested_path() {
-    test_output_matches "Scan deeply nested path" "Summary" "$TEST_DIR/deep/nested/directory/structure"
+    test_output_matches \
+        "Scan deeply nested path" "Summary" \
+        "$TEST_DIR/deep/nested/directory/structure"
 }
 
 # Test 29: Directory statistics shows correct directory names
@@ -406,7 +442,11 @@ test_directory_statistics_multilevel() {
 
     # Extract directory names from statistics section
     local dir_names
-    dir_names=$(sed -n '/Directory statistics/,/^==========/p' "$output_file" | grep -E '^[a-z_]+[[:space:]]+:' | cut -d':' -f1 | tr -d ' ')
+    dir_names=$(
+        sed -n '/Directory statistics/,/^==========/p' "$output_file" | \
+        grep -E '^[a-z_]+[[:space:]]+:' | \
+        cut -d':' -f1 | tr -d ' '
+    )
 
     if [ -n "$dir_names" ]; then
         # Check if any directory name contains a slash (nested path)
@@ -430,7 +470,10 @@ test_directory_statistics_format() {
 
     # Extract directory statistics lines
     local dir_lines
-    dir_lines=$(sed -n '/Directory statistics/,/^==========/p' "$output_file" | grep -E '^[a-z_]+[[:space:]]+:[[:space:]]+[0-9]+')
+    dir_lines=$(
+        sed -n '/Directory statistics/,/^==========/p' "$output_file" | \
+        grep -E '^[a-z_]+[[:space:]]+:[[:space:]]+[0-9]+'
+    )
 
     if [ -n "$dir_lines" ]; then
         # Check if lines are formatted correctly and sorted
