@@ -266,8 +266,14 @@ tmp_results="$(mktemp)"
 
 for file in "${go_files[@]}"; do
   rel_path="$file"
-  if [[ -n "$root" && "$file" == "$root"/* ]]; then
-    rel_path="${file#"$root"/}"
+  if [[ -n "$root" ]]; then
+    # Ensure root ends with slash for consistent removal
+    root_with_slash="$root"
+    [[ "$root_with_slash" != */ ]] && root_with_slash="$root_with_slash/"
+    # Remove root prefix from file path
+    if [[ "$file" == "$root_with_slash"* ]]; then
+      rel_path="${file#"$root_with_slash"}"
+    fi
   fi
 
   # Process each Go file with Perl state machine to detect doc comment mismatches
@@ -277,7 +283,7 @@ for file in "${go_files[@]}"; do
   # - State 3: Report mismatches (when comment first word != function name)
   # Output format uses field separator ($sep) for parsing by subsequent shell code
 
-  perl_script='
+  perl_script=$(cat <<'PERL'
     BEGIN {
       $rel = $ENV{"REL"};
       $sep = $ENV{"SEP"};
@@ -327,7 +333,8 @@ for file in "${go_files[@]}"; do
     $inComment = 0;
     $commentLine = "";
     $firstWord = "";
-  '
+PERL
+  )
 
   REL="$rel_path" SEP="$sep" perl -ne "$perl_script" "$file" >> "$tmp_results"
 done
@@ -374,7 +381,17 @@ count_all=0
 
 while IFS="$sep" read -r file first_word func_name comment_line func_decl; do
   count_all=$((count_all + 1))
-  top_dir="${file%%/*}"
+
+  # Extract top-level directory from file path
+  # Handle paths that may still have absolute components
+  top_dir="$file"
+  # Remove any remaining drive letter or absolute path prefix (for compatibility)
+  top_dir="${top_dir#*:}"
+  # Extract first directory component (before first slash)
+  if [[ "$top_dir" == */* ]]; then
+    top_dir="${top_dir%%/*}"
+  fi
+
   dir_all["$top_dir"]=$((dir_all["$top_dir"] + 1))
 
   {
@@ -396,7 +413,8 @@ write_summary() {
   local -n dir_map="$3"
   local tmp_body="$4"
   local is_file="$5"
-  local exec_time="$(date '+%Y-%m-%d %H:%M:%S')"
+  local exec_time
+  exec_time="$(date '+%Y-%m-%d %H:%M:%S')"
 
   if [[ -z "$output_file" ]]; then
     # Output to stdout

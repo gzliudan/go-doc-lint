@@ -70,7 +70,7 @@ cd /path/to/go-doc-lint
 bash test.sh
 ```
 
-**测试覆盖范围（28 个测试）：**
+**测试覆盖范围（33 个测试）：**
 
 - 版本和帮助显示
 - 目录扫描
@@ -111,7 +111,7 @@ cd path\to\go-doc-lint
 powershell -File test.ps1 -ScriptPath ".\go-doc-lint.ps1"
 ```
 
-**测试覆盖范围（28 个测试）：**
+**测试覆盖范围（33 个测试）：**
 
 - 版本和帮助显示
 - 目录扫描

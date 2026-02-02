@@ -28,9 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Version checking and validation
   - Identical functionality and output formatting
 
-- **Comprehensive Test Suite** (28 tests):
-  - Bash tests (`test.sh`) with 28 test cases
-  - PowerShell tests (`test.ps1`) with 28 test cases
+- **Comprehensive Test Suite**:
+  - Bash tests (`test.sh`) covering all functionality
+  - PowerShell tests (`test.ps1`) covering all functionality
   - Tests cover: basic operations, input validation, file filtering, output handling,
     report verification, parameter validation, path handling, edge cases
   - Color-coded test output (green/red/yellow)

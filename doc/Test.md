@@ -69,7 +69,7 @@ cd /path/to/go-doc-lint
 bash test.sh
 ```
 
-**Test Coverage (28 Tests):**
+**Test Coverage (33 Tests):**
 
 - Version and help display
 - Directory scanning
@@ -110,7 +110,7 @@ Or with explicit script path:
 powershell -File test.ps1 -ScriptPath ".\go-doc-lint.ps1"
 ```
 
-**Test Coverage (28 Tests):**
+**Test Coverage (33 Tests):**
 
 - Version and help display
 - Directory scanning

@@ -66,8 +66,8 @@ For advanced troubleshooting and debugging, see [TROUBLESHOOTING.md](doc/TROUBLE
 go-doc-lint/
 ├── go-doc-lint.sh       # Main Bash implementation
 ├── go-doc-lint.ps1      # Main PowerShell implementation
-├── test.sh              # Bash test suite (28 tests)
-├── test.ps1             # PowerShell test suite (28 tests)
+├── test.sh              # Bash test suite
+├── test.ps1             # PowerShell test suite
 ├── fixtures/            # Test data directory
 │   ├── valid/          # Valid Go files for testing
 │   ├── invalid/        # Invalid Go files for testing
@@ -108,7 +108,7 @@ bash test.sh
 .\test.ps1
 ```
 
-Expected output: `28 passed, 0 failed` for both test suites.
+Expected output: All tests should pass (actual count shown in output).
 
 ### 4. Update Documentation
 

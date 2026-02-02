@@ -29,7 +29,7 @@ go-doc-lint is built on these core principles:
 2. **No External Dependencies**: Use only native language features (Bash 4.0+, PowerShell 5.0+, Perl)
 3. **Feature Parity**: Both implementations provide identical functionality
 4. **Code Clarity**: Prioritize readable, maintainable code over optimization
-5. **Comprehensive Testing**: 28 tests for each implementation covering all code paths
+5. **Comprehensive Testing**: Extensive test suite for each implementation covering all code paths
 
 ---
 
@@ -64,7 +64,7 @@ go-doc-lint is built on these core principles:
 | Trade-off              | Impact                                               |
 | ---------------------- | ---------------------------------------------------- |
 | **Code Duplication**   | Requires maintaining two codebases                   |
-| **Double Testing**     | 56 total tests (28 per implementation)               |
+| **Double Testing**     | 66 total tests (33 per implementation)               |
 | **Learning Curve**     | Contributors need both Bash and PowerShell knowledge |
 | **Maintenance Effort** | Features must be implemented twice                   |
 
@@ -329,7 +329,7 @@ Parsing steps:
 
 ## Testing Strategy
 
-### Test Coverage (28 tests each)
+### Test Coverage
 
 ```text
 Core Functionality (5 tests)
@@ -378,14 +378,14 @@ Error Cases (4 tests)
 
 ```bash
 bash test.sh
-# Output: 28 tests, all passing
+# Output: All tests passing (see output for test count)
 ```
 
 **PowerShell Tests**:
 
 ```powershell
 .\test.ps1
-# Output: 28 tests, all passing
+# Output: All tests passing (see output for test count)
 ```
 
 ### Test Structure

@@ -339,7 +339,9 @@ foreach ($file in $goFiles) {
                     # Convert to relative path by removing the input root
                     $relPath = $file.FullName
                     if ($root) {
-                        $relPath = $relPath -replace [regex]::Escape("$root\"), ""
+                        # Ensure root ends with backslash for consistent replacement
+                        $rootWithSlash = if ($root.EndsWith('\')) { $root } else { "$root\" }
+                        $relPath = $relPath -replace [regex]::Escape($rootWithSlash), ""
                     }
 
                     $obj = New-Object PSObject -Property @{
@@ -440,9 +442,25 @@ function GenerateDirSummary {
     # Extract directory stats from resultArray (every 4 elements is one entry: file, comment, func, blank)
     for ($i = 0; $i -lt $resultArray.Count; $i += 4) {
         if ($resultArray[$i]) {
-            # Get the first directory level (before first backslash)
             $file = $resultArray[$i]
-            $topDir = if ($file -match '^([^\\]+)') { $matches[1] } else { $file }
+
+            # Extract the first directory component (top-level directory)
+            # Handle both relative paths (e.g., "accounts\file.go") and
+            # any remaining absolute paths (e.g., "E:\accounts\file.go")
+            $topDir = $file
+
+            # Remove drive letter if present (e.g., "E:\accounts" -> "accounts")
+            if ($file -match '^[A-Za-z]:[\\/](.+)') {
+                $file = $matches[1]
+            }
+
+            # Extract first directory component before backslash or forward slash
+            if ($file -match '^([^\\\/]+)[\\/]') {
+                $topDir = $matches[1]
+            } elseif ($file -match '^([^\\\/]+)$') {
+                # Single file without directory
+                $topDir = $matches[1]
+            }
 
             if (-not $dirStats.ContainsKey($topDir)) {
                 $dirStats[$topDir] = 0

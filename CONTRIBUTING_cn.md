@@ -66,8 +66,8 @@
 go-doc-lint/
 ├── go-doc-lint.sh       # 主 Bash 实现
 ├── go-doc-lint.ps1      # 主 PowerShell 实现
-├── test.sh              # Bash 测试套件（28 个测试）
-├── test.ps1             # PowerShell 测试套件（28 个测试）
+├── test.sh              # Bash 测试套件
+├── test.ps1             # PowerShell 测试套件
 ├── fixtures/            # 测试数据目录
 │   ├── valid/          # 有效的 Go 文件测试用例
 │   ├── invalid/        # 无效的 Go 文件测试用例
@@ -108,7 +108,7 @@ bash test.sh
 .\test.ps1
 ```
 
-预期输出：两个测试套件都应显示 `28 passed, 0 failed`。
+预期输出：所有测试都应通过（具体数量见输出）。
 
 ### 4. 更新文档
 
