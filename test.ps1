@@ -167,7 +167,8 @@ function Clear-TestOutput {
 
 # Test 1: Display version
 function Test-Version {
-    Test-OutputExact -TestName "Display version" -Expected "v1.0.0" -Arguments @("--version")
+    $expectedVersion = (Get-Content -Path "$PSScriptRoot\VERSION" -Raw).Trim()
+    Test-OutputExact -TestName "Display version" -Expected $expectedVersion -Arguments @("--version")
 }
 
 # Test 2: Display help

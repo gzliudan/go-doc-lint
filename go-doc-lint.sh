@@ -15,7 +15,9 @@ command -v awk >/dev/null 2>&1 || {
   exit 1
 }
 
-script_version="v1.0.0"
+# Read version from VERSION file
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_version=$(cat "$script_dir/VERSION" | tr -d '[:space:]')
 product_name="golang document linter"
 
 input_path="."

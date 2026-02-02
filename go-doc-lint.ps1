@@ -7,7 +7,8 @@ if ($PSVersionTable.PSVersion.Major -lt 5) {
     exit 1
 }
 
-$scriptVersion = "v1.0.0"
+# Read version from VERSION file
+$scriptVersion = (Get-Content -Path "$PSScriptRoot\VERSION" -Raw).Trim()
 $scriptName = Split-Path -Leaf $MyInvocation.MyCommand.Path
 $productName = "golang document linter"
 

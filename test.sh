@@ -154,7 +154,9 @@ cleanup() {
 
 # Test 1: Display version
 test_version() {
-    test_output_exact "Display version" "v1.0.0" --version
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    expected_version=$(cat "$script_dir/VERSION" | tr -d '[:space:]')
+    test_output_exact "Display version" "$expected_version" --version
 }
 
 # Test 2: Display help

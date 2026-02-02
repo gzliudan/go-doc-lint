@@ -464,4 +464,3 @@ MIT License
 ---
 
 **Last Updated**: 2026-02-01
-**Version**: v1.0.0
