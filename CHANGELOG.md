@@ -7,6 +7,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-02-02
+
+### Added
+
+- Add changelog config and release workflow
+
 ## [1.0.1] - 2026-02-02
 
 ### Changed
@@ -59,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Contributing Guide** (`CONTRIBUTING.md`): Developer guidelines
   - **Contributing Guide CN** (`CONTRIBUTING_cn.md`): Chinese version
   - **Test Documentation** (`doc/Test.md` & `doc/Test_cn.md`): Testing guide
-  - **Best Practices Guide** (`doc/BEST_PRACTICES.md` & `doc/BEST_PRACTICES_cn.md`): Integration patterns
+  - **Best Practices Guide** (`doc/BEST_PRACTICES.md` &
+    `doc/BEST_PRACTICES_cn.md`): Integration patterns
   - Language switching links throughout all documentation
   - Quick Start section for rapid setup
   - System requirements and version mapping
@@ -156,5 +163,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Maintainer:** Daniel Liu
 **License:** MIT
 
+[1.1.0]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.1.0
 [1.0.1]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.0.1
 [1.0.0]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.0.0

@@ -7,6 +7,12 @@
 此项目遵循[语义化版本](https://semver.org/spec/v2.0.0.html)规范，
 日志格式基于 [Keep a Changelog](https://keepachangelog.com/) 标准。
 
+## [1.1.0] - 2026-02-02
+
+### 新增
+
+- 添加更新日志配置和发布工作流
+
 ## [1.0.1] - 2026-02-02
 
 ### 变更
@@ -156,5 +162,6 @@
 **维护者**：Daniel Liu
 **许可证**：MIT
 
+[1.1.0]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.1.0
 [1.0.1]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.0.1
 [1.0.0]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.0.0

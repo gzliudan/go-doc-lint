@@ -213,7 +213,7 @@ powershell -File go-doc-lint.ps1 ./common/
 ================================================================================
                                     Summary
 tool:     golang document linter
-version:  v1.0.1
+version:  v1.1.0
 input:    /path/to/common
 time:     2026-01-31 12:00:00
 findings: 5

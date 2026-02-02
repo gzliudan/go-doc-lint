@@ -238,7 +238,7 @@
 
    ```yaml
    - repo: https://github.com/gzliudan/go-doc-lint
-     rev: v1.0.1
+       rev: v1.1.0
      hooks:
        - id: go-doc-lint
          language: script
