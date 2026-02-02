@@ -7,6 +7,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-02-02
+
+### Changed
+
+- Centralized version management to VERSION file
+- Scripts now read version from VERSION file instead of hardcoding
+- Simplified version maintenance process
+- Optimized code line length for better readability
+
+### Removed
+
+- Removed redundant version information from documentation files
+
+### Fixed
+
+- Resolve relative path bug and linter warnings
+
 ## [1.0.0] - 2026-02-01
 
 ### Added
@@ -82,22 +99,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - I/O bound (not CPU limited)
   - Vendor and .git directory auto-exclusion
 
-### Changed
-
-- N/A (initial release)
-
-### Deprecated
-
-- N/A (initial release)
-
-### Removed
-
-- N/A (initial release)
-
-### Fixed
-
-- N/A (initial release)
-
 ### Security
 
 - No external dependencies required
@@ -151,8 +152,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-**Last Updated:** 2026-02-01
+**Last Updated:** 2026-02-02
 **Maintainer:** Daniel Liu
 **License:** MIT
 
+[1.0.1]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.0.1
 [1.0.0]: https://github.com/gzliudan/go-doc-lint/releases/tag/v1.0.0

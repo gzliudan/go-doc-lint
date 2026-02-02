@@ -33,5 +33,5 @@ fixtures/test_output/
 go-doc-lint-2*.txt
 
 # Editor/IDE
-# .idea/
-# .vscode/
+.idea/
+.vscode/

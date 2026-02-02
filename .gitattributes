@@ -1,0 +1,2 @@
+# Specify file types for proper language detection
+VERSION text linguist-language=Text
