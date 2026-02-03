@@ -1,4 +1,4 @@
-name: build
+name: ci
 
 on:
   push:
@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 jobs:
-  build-go-doc-lint:
+  tag_build:
     strategy:
       matrix:
         platform: [ubuntu-latest]
